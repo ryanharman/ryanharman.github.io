@@ -3,40 +3,44 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
-		--primary: 0 0% 0%;
-		--secondary: 240 5.9% 10%;
-		--tertiary: 240 3.7% 15.9%;
-		--background: 240 5.9% 90%;
-	}
+  :root {
+    /* Always default to light mode */
+    color-scheme: light;
 
-	.dark,
-	[data-theme="dark"] {
-		--primary: 0 0% 100%;
-		--secondary: 240 4.9% 83.9%;
-		--tertiary: 240 5% 64.9%;
-		--background: 0 0% 0%;
-	}
+    /* Light theme variables - always used */
+    --primary: 0 0% 0%;
+    --secondary: 240 5.9% 10%;
+    --tertiary: 240 3.7% 15.9%;
+    --background: 240 5.9% 90%;
+  }
 
-	img {
-		@apply inline-block;
-	}
+  /* .dark, */
+  /* [data-theme="dark"] { */
+  /* 	--primary: 0 0% 100%; */
+  /* 	--secondary: 240 4.9% 83.9%; */
+  /* 	--tertiary: 240 5% 64.9%; */
+  /* 	--background: 0 0% 0%; */
+  /* } */
+
+  img {
+    @apply inline-block;
+  }
 }
 
 /* This is to allow us to scale the font-sizes of the PDF down to a size that allows us */
 /* to fit more content on a single page. Whilst still maintaining the Tailwind CSS font scaling */
 .pdf-font-size-scaler {
-	/* We assign Arial to the font because otherwise there are issues with the font rendering/spacing */
-	font-family: "Arial" !important;
+  /* We assign Arial to the font because otherwise there are issues with the font rendering/spacing */
+  font-family: "Arial" !important;
 
-	.text-2xl {
-		font-size: 1.3rem !important;
-	}
-	.text-lg {
-		font-size: 0.95rem !important;
-	}
-	.text-sm {
-		font-size: 0.75rem !important;
-	}
-	font-size: 0.9rem !important;
+  .text-2xl {
+    font-size: 1.3rem !important;
+  }
+  .text-lg {
+    font-size: 0.95rem !important;
+  }
+  .text-sm {
+    font-size: 0.75rem !important;
+  }
+  font-size: 0.9rem !important;
 }
