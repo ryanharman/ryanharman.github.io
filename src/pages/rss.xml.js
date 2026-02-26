@@ -2,12 +2,12 @@ import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
-export async function get(context) {
+export async function GET(context) {
   const posts = await getCollection("thoughts");
-  const content = await getCollection("content");
+  const projects = await getCollection("projects");
   const experience = await getCollection("experience");
 
-  const posts_content_experience = [...posts, ...content, ...experience];
+  const posts_content_experience = [...posts, ...projects, ...experience];
 
   const collectionMap = {
     experience: "/cv",
