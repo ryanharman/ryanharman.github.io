@@ -177,6 +177,20 @@
     border: none;
     border-top: 1px solid hsl(var(--primary) / 0.2);
   }
+
+  /* Keep embedded media and wide tables inside the column on small screens so
+     a stray image or table never forces the whole page to scroll sideways. */
+  .prose img,
+  .prose video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+  }
+  .prose table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
 }
 
 /* The CV exports via the browser's native "Save as PDF" (window.print). */
