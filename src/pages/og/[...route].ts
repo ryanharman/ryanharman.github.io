@@ -8,17 +8,21 @@ const posts = await getCollection("thoughts");
 // the headline); posts use their own title so a shared link previews the piece.
 const pages: Record<string, { title: string; description: string }> = {
 	home: { title: "Ryan Harman", description: SITE_DESCRIPTION },
-	about: {
+	projects: {
 		title: "Ryan Harman",
-		description: "About — who I am and what I build.",
+		description: "Projects - open-source web apps and experiments I've built.",
 	},
 	thoughts: {
 		title: "Ryan Harman",
-		description: "Thoughts — writing on engineering, AI and the craft.",
+		description: "Thoughts - writing on engineering, AI and the craft.",
 	},
 	cv: {
 		title: "Ryan Harman",
-		description: "CV — experience, skills and background.",
+		description: "CV - experience, skills and background.",
+	},
+	contact: {
+		title: "Contact Me",
+		description: "Get in touch - email, LinkedIn or GitHub.",
 	},
 	...Object.fromEntries(
 		posts.map((post) => [

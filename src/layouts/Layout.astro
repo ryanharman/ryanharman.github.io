@@ -5,9 +5,7 @@ import Header from "../components/Header.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
 type Props = {
-	currentPage: "/" | "/about" | "/thoughts" | "/cv";
-	// The intro hero is opt-in (home only); every other page omits it.
-	showHero?: boolean;
+	currentPage: "/" | "/projects" | "/thoughts" | "/cv" | "/contact";
 	// Per-page metadata; falls back to the site-wide defaults.
 	title?: string;
 	description?: string;
@@ -17,7 +15,6 @@ type Props = {
 
 const {
 	currentPage,
-	showHero,
 	title = SITE_TITLE,
 	description = SITE_DESCRIPTION,
 	article,
@@ -40,49 +37,7 @@ const {
         Theme toggle hidden
       </button> -->
     </Header>
-    {
-      showHero && (
-        <article class="space-y-3 relative">
-          <div class="flex">
-            <h1 class="mb-4 font-bold text-4xl tracking-tight text-secondary">
-              Hey, I’m <span class="text-primary">Ryan Harman</span>
-            </h1>
-            <div class="text-3xl ml-2 animate-[wiggle_1s_ease-in-out_infinite] w-fit">
-              👋
-            </div>
-          </div>
-          <p class="text-lg text-secondary">
-            I’m a Software Engineer specialising in web technologies.{" "}
-            <span class="font-medium text-primary">
-              I build robust, scalable products with a focus on React, Node.js,
-              and AWS.
-            </span>
-          </p>
-          <p class="text-lg">
-            You can find my projects on{" "}
-            <a class="link" href="https://github.com/ryanharman" target="_blank">
-              GitHub.
-            </a>
-          </p>
-          <p class="text-lg">
-            Want to chat? Connect with me on{" "}
-            <a
-              class="link"
-              href="https://www.linkedin.com/in/ryan-harman63/"
-              target="_blank"
-            >
-              LinkedIn
-            </a>{" "}
-            or get in touch via{" "}
-            <a class="link" href="mailto:me@ryanharman.dev">
-              me@ryanharman.dev
-            </a>
-          </p>
-          <div class="w-full h-[1px] pt-6 border-b border-primary/50" />
-        </article>
-      )
-    }
-    <main class="space-y-12">
+    <main class="space-y-12 pt-4 sm:pt-8 print:pt-0">
       <slot />
     </main>
     <Footer />

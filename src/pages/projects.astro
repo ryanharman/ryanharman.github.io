@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+const projects = await getCollection("projects");
+---
+
+<Layout
+  currentPage="/projects"
+  title="Projects - Ryan Harman"
+  description="A selection of open-source web apps and experiments I've built outside of work."
+>
+  <section class="space-y-6">
+    <h1 class="text-2xl font-medium tracking-tight">Some of my own work</h1>
+    <p class="text-secondary leading-relaxed">
+      I love to build things and take on new challenges. Often attempts at just
+      learning something new, other times to solve problems of my own. Either
+      way, they’re fun web apps and scripts that have supported my understanding
+      of the development world.
+    </p>
+    <p class="text-secondary leading-relaxed">
+      I always aim to share these projects with the world as open source, and
+      these are some of my favourites that I’ve built recently.
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-x-5 gap-y-6 pt-2">
+      {
+        projects?.map((project) => (
+          <div class="space-y-4 hover:bg-primary/5 hover:transition-none transition-colors rounded-lg p-4">
+            <div class="space-y-2">
+              <a href={project.data.link} target="_blank">
+                <div class="link w-fit font-medium tracking-tight">
+                  {project.data.title}
+                </div>
+              </a>
+              <p class="font-mono text-tertiary text-sm">{project.data.stack}</p>
+            </div>
+            <p>{project.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

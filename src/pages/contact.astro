@@ -1,0 +1,53 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  currentPage="/contact"
+  title="Contact - Ryan Harman"
+  description="Get in touch with Ryan Harman, a software engineer based in Manchester."
+>
+  <section class="space-y-10 py-4">
+    <h1 class="font-bold text-4xl sm:text-5xl tracking-tight text-primary">
+      Contact me
+    </h1>
+
+    <p class="text-lg text-secondary max-w-prose">
+      Whether you’re hiring, have a project in mind, or just fancy a chat, I’d
+      love to hear from you.
+    </p>
+
+    <dl class="grid gap-x-8 gap-y-8 sm:grid-cols-2">
+      <div class="space-y-1">
+        <dt class="font-mono text-sm lowercase text-tertiary">email</dt>
+        <dd>
+          <a class="link" href="mailto:me@ryanharman.dev">me@ryanharman.dev</a>
+        </dd>
+      </div>
+      <div class="space-y-1">
+        <dt class="font-mono text-sm lowercase text-tertiary">linkedin</dt>
+        <dd>
+          <a
+            class="link"
+            href="https://www.linkedin.com/in/ryan-harman63/"
+            target="_blank"
+          >
+            linkedin.com/in/ryan-harman63
+          </a>
+        </dd>
+      </div>
+      <div class="space-y-1">
+        <dt class="font-mono text-sm lowercase text-tertiary">github</dt>
+        <dd>
+          <a
+            class="link"
+            href="https://github.com/ryanharman"
+            target="_blank"
+          >
+            github.com/ryanharman
+          </a>
+        </dd>
+      </div>
+    </dl>
+  </section>
+</Layout>

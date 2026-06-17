@@ -1,6 +1,6 @@
 ---
 type Props = {
-	currentPage: "/" | "/about" | "/thoughts" | "/cv";
+	currentPage: "/" | "/projects" | "/thoughts" | "/cv" | "/contact";
 };
 
 const { currentPage } = Astro.props;
@@ -25,12 +25,12 @@ const defaultClasses =
       </li>
       <li>
         <a
-          class={currentPage === "/about"
+          class={currentPage === "/projects"
             ? `${activeClasses} ${defaultClasses}`
             : `${defaultClasses} text-secondary`}
-          href="/about"
+          href="/projects"
         >
-          about</a
+          projects</a
         >
       </li>
       <li>
@@ -51,6 +51,16 @@ const defaultClasses =
           href="/cv"
         >
           cv</a
+        >
+      </li>
+      <li>
+        <a
+          class={currentPage === "/contact"
+            ? `${activeClasses} ${defaultClasses}`
+            : `${defaultClasses} text-secondary`}
+          href="/contact"
+        >
+          contact</a
         >
       </li>
     </ul>

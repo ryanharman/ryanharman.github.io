@@ -1,62 +1,51 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-
-const projects = await getCollection("projects");
 ---
 
-<Layout currentPage="/" showHero>
-  <article class="space-y-4">
-    <!-- <h2 class="text-2xl font-medium tracking-tight">Let’s work together</h2> -->
-    <p>
-      I help forward-thinking individuals, startups and enterprises to develop
-      innovative digital solutions that drive business success and meet
-      ambitious deadlines.
-      <span class="font-medium text-tertiary"
-        >My goal is to always create exceptional experiences for the right
-        reasons.</span
-      >
-    </p>
-    <p>
-      You can find out more in my <a class="link" href="/about">about</a> page or take a look at my <a class="link" href="/cv">experience</a>
-    </p>
-  </article>
-  <article class="space-y-4">
-    <h2 class="text-2xl font-medium tracking-tight">Some of my projects</h2>
-    <p>
-      I love to build things and take on new challenges. Often attempts at just
-      learning something new, other times to solve problems of my own. Either
-      way, they’re fun web apps and scripts that have supported in my
-      understanding of the development world.
-    </p>
-    <p>
-      I always aim to share these projects with the world as open source, and
-      these are some of my favourites that I’ve built recently.
-    </p>
+<Layout currentPage="/">
+  <div class="space-y-10 sm:space-y-14">
+    <article class="space-y-10">
+      <div class="flex items-center">
+        <h1
+          class="font-bold text-4xl sm:text-5xl tracking-tight text-secondary"
+        >
+          Hey, I’m <span class="text-primary">Ryan Harman</span>
+        </h1>
+        <div
+          class="text-3xl sm:text-4xl ml-3 animate-[wiggle_1s_ease-in-out_infinite] w-fit"
+        >
+          👋
+        </div>
+      </div>
+      <p class="text-lg leading-relaxed text-secondary">
+        I’m a software engineer based in Manchester, with{" "}
+        <span class="font-medium text-primary">
+          the best part of a decade building robust, accessible, user-centred
+          products on the web
+        </span>{" "}
+        for startups, scale-ups and established businesses. Ranging from automotive,
+        healthcare, legal, music industry giants to fast-moving SaaS.
+      </p>
+      <p class="text-lg leading-relaxed text-secondary">
+        Right now I’m a{" "}
+        <a
+          href="https://sabermine.ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="link">Staff Engineer at Saber</a
+        >, where I help steer our frontend platform, mentor my teammates,
+        and shape the standards we build to whilst continuing to ship code.
+      </p>
+    </article>
 
-    <div class="grid md:grid-cols-2 gap-x-4 gap-y-4">
-      {
-        projects?.map((project) => (
-          <div class="space-y-4 hover:bg-primary/5 hover:transition-none transition-colors rounded-lg p-4">
-            <div class="space-y-2">
-              <a href={project.data.link} target="_blank">
-                <div class="link w-fit font-medium tracking-tight">
-                  {project.data.title}
-                </div>
-              </a>
-              <p class="font-mono text-tertiary text-sm">
-                {project.data.stack}
-              </p>
-            </div>
-            <p class="">{project.body}</p>
-          </div>
-        ))
-      }
-    </div>
-  </article>
-    <div class="pt-6">
-      <a class="btn group" href="mailto:me@ryanharman.dev"
-        >Work with me <svg
+    <article class="space-y-6">
+      <p class="text-lg leading-relaxed text-secondary">
+        Take a look at <a class="link" href="/projects">some of my work</a> or
+        read more about <a class="link" href="/cv">my experience</a>.
+      </p>
+      <div class="pt-2">
+      <a class="btn group" href="/contact"
+        >Get in touch <svg
           class="inline-block group-hover:-translate-y-[2px] group-hover:translate-x-[2px] transition-transform"
           width="18"
           height="18"
@@ -70,5 +59,7 @@ const projects = await getCollection("projects");
             clip-rule="evenodd"></path></svg
         ></a
       >
-    </div>
+      </div>
+    </article>
+  </div>
 </Layout>
