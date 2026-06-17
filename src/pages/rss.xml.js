@@ -3,32 +3,22 @@ import rss from "@astrojs/rss";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
 export async function GET(context) {
-	const posts = await getCollection("thoughts");
-	const projects = await getCollection("projects");
-	const experience = await getCollection("experience");
-
-	const posts_content_experience = [...posts, ...projects, ...experience];
-
-	const collectionMap = {
-		experience: "/cv",
-		projects: "/",
-		thoughts: "/thoughts",
-	};
-
-	const rssItems = posts_content_experience.map((entry) => {
-		let link = collectionMap[entry.collection];
-
-		if (entry.collection === "thoughts") {
-			link = `/thoughts/${entry.slug}/`;
-		}
-
-		return { ...entry.data, link };
-	});
+	// Only "thoughts" are real, dated articles. Projects and experience have no
+	// description/pubDate and no unique per-entry URL, so including them produced
+	// invalid RSS items (missing dates, duplicate links). Keep the feed to posts.
+	const posts = (await getCollection("thoughts")).sort(
+		(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+	);
 
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		site: context.site,
-		items: rssItems,
+		items: posts.map((post) => ({
+			title: post.data.title,
+			description: post.data.description,
+			pubDate: post.data.publishedAt,
+			link: `/thoughts/${post.slug}/`,
+		})),
 	});
 }

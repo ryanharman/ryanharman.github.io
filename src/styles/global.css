@@ -14,8 +14,16 @@
        (Previously all three sat at 0–16% lightness and looked identical.) */
     --primary: 240 6% 10%;
     --secondary: 240 5% 32%;
-    --tertiary: 240 4% 45%;
+    /* L=40% lands at ~4.77:1 on the 90% background, clearing WCAG AA (4.5:1)
+       for the small meta/label text this drives. At the previous 45% it was
+       ~3.97:1 and failed. Still 8 points lighter than secondary, so the
+       primary/secondary/tertiary ramp stays visibly distinct. */
+    --tertiary: 240 4% 40%;
     --background: 240 5.9% 90%;
+    /* Brand accent, tying back to the favicon's terminal-green. The favicon
+       uses a bright green on its dark square; this is a deeper shade of the
+       same hue so it stays legible on the light page background. */
+    --accent: 142 72% 29%;
   }
 
   /* .dark, */

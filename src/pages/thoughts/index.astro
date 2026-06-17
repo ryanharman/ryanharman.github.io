@@ -4,7 +4,7 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import Layout from "../../layouts/Layout.astro";
 
 const posts = (await getCollection("thoughts")).sort(
-	(a, b) => a.data.publishedAt.valueOf() - b.data.publishedAt.valueOf(),
+	(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
 );
 ---
 
@@ -15,29 +15,23 @@ const posts = (await getCollection("thoughts")).sort(
       {
         posts.length === 0 ? (
           <li>
-            <h3 class="tracking-tight font-medium text-zinc-300">
+            <h2 class="tracking-tight font-medium text-tertiary">
               No posts yet. Maybe check another time
-            </h3>
+            </h2>
           </li>
         ) : (
-          posts
-            .sort((p) => p.data.publishedAt.valueOf())
-            .reverse()
-            .map((post) => (
-              <li class="flex justify-between gap-4 py-3">
-                <a
-                  class="col-span-2 hover:underline"
-                  href={`/thoughts/${post.slug}/`}
-                >
-                  <h4 class="tracking-tight font-medium col-span-3 group-hover:underline">
-                    {post.data.title}
-                  </h4>
-                </a>
-                <p class="text-right whitespace-nowrap">
-                  <FormattedDate date={post.data.publishedAt} />
-                </p>
-              </li>
-            ))
+          posts.map((post) => (
+            <li class="flex flex-col gap-1 py-3 sm:flex-row sm:justify-between sm:gap-4">
+              <a class="hover:underline" href={`/thoughts/${post.slug}/`}>
+                <h2 class="tracking-tight font-medium group-hover:underline">
+                  {post.data.title}
+                </h2>
+              </a>
+              <p class="text-tertiary text-sm sm:text-right sm:whitespace-nowrap">
+                <FormattedDate date={post.data.publishedAt} />
+              </p>
+            </li>
+          ))
         )
       }
     </ul>

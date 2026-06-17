@@ -15,11 +15,11 @@ const { title, description, publishedAt, tags } = Astro.props;
   article={{ title, publishedAt, tags }}
 >
   <div class="max-w-prose">
-    <div class="flex justify-between gap-4 mb-2">
-      <div class="col-span-2">
+    <div class="flex flex-col gap-1 mb-2 sm:flex-row sm:justify-between sm:gap-4">
+      <div>
         <h2 class="text-primary text-2xl font-medium mb-2">{title}</h2>
       </div>
-      <p class="mt-2 text-right whitespace-nowrap">
+      <p class="text-tertiary text-sm sm:mt-2 sm:text-right sm:whitespace-nowrap">
         <FormattedDate date={publishedAt} />
       </p>
     </div>

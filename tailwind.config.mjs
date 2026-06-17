@@ -9,6 +9,7 @@ export default {
 				secondary: "hsl(var(--secondary))",
 				tertiary: "hsl(var(--tertiary))",
 				background: "hsl(var(--background))",
+				accent: "hsl(var(--accent))",
 			},
 			fontFamily: {
 				sans: ['"Geist Variable"', "ui-sans-serif", "system-ui", "sans-serif"],

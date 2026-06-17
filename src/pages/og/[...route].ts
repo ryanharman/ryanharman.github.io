@@ -38,6 +38,10 @@ export const { getStaticPaths, GET } = await OGImageRoute({
 	getImageOptions: (_path, page) => ({
 		title: page.title,
 		description: page.description,
+		// Vendored locally (rather than astro-og-canvas's default remote Noto Sans
+		// URL) so the build is hermetic — it never reaches out to the network and
+		// can't fail when api.fontsource.org is unreachable from CI.
+		fonts: ["./src/assets/fonts/noto-sans-latin-400.ttf"],
 		// Match the site palette: zinc-tinted light background, near-black text,
 		// muted description, and a primary-coloured strip along the bottom edge.
 		bgGradient: [
