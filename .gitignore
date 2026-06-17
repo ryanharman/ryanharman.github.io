@@ -19,3 +19,10 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# This project uses bun (bun.lockb). Ignore other package managers' lockfiles
+# so an accidental `npm install` can't reintroduce a conflicting lockfile that
+# flips Vercel to npm and breaks the build.
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
