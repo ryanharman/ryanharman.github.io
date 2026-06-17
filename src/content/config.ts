@@ -23,12 +23,22 @@ const projects = defineCollection({
 const experience = defineCollection({
 	schema: z.object({
 		company: z.string(),
-		"company-link": z.string().url(),
+		companyLink: z.string().url(),
 		title: z.string(),
 		stack: z.string(),
 		location: z.string(),
-		"start-date": z.string().or(z.date()),
-		"end-date": z.string().or(z.date()),
+		startDate: z.coerce.date(),
+		// Omit endDate to mark a role as current ("Present").
+		endDate: z.coerce.date().optional(),
+		// Controls how the role appears in the CV without deleting the file:
+		//   "full"            – company, role and description (default)
+		//   "hideDescription" – company and role only, no description body
+		//   "hidden"          – excluded entirely
+		visibility: z.enum(["full", "hideDescription", "hidden"]).default("full"),
+		// Marks a role as the umbrella/summary entry for its company block: it
+		// renders first within the block and hides its individual date line (the
+		// block header already shows the overall span). Used for freelance.
+		lead: z.boolean().default(false),
 	}),
 });
 

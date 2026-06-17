@@ -1,5 +1,6 @@
 ---
 import Cv from "./Cv.astro";
+import Slashes from "./Slashes.astro";
 ---
 
 <div class="mt-12" id="cv-export">
@@ -7,25 +8,34 @@ import Cv from "./Cv.astro";
     Ryan Harman, Software Engineer
   </h1>
   <div
-    class="max-w-prose flex gap-4 items-center mb-6 font-mono text-secondary"
+    class="flex gap-x-3 items-center my-2 font-mono text-secondary text-sm"
   >
     <a
       class="hover:underline hover:text-primary hover:transition-none transition-all"
       href="mailto:me@ryanharman.dev"
       target="_blank">me@ryanharman.dev</a
     >
-    <span class="tracking-[-0.3rem] text-tertiary font-mono text-lg">//</span>
+    <Slashes />
+    <a
+      class="hover:underline hover:text-primary hover:transition-none transition-all"
+      href="https://www.linkedin.com/in/ryan-harman63/"
+      target="_blank">linkedin.com/in/ryan-harman63</a
+    >
+  </div>
+  <div
+    class="flex gap-x-3 gap-y-1 items-center mb-6 font-mono text-secondary text-sm"
+  >
     <a
       class="hover:underline hover:text-primary hover:transition-none transition-all"
       href="https://ryanharman.dev"
       target="_blank">ryanharman.dev</a
     >
-    <span class="tracking-[-0.3rem] text-tertiary font-mono text-lg">//</span>
+    <Slashes />
     <a
       class="hover:underline hover:text-primary hover:transition-none transition-all"
       href="https://github.com/ryanharman"
       target="_blank">github.com/ryanharman</a
     >
-  </div>
+    </div>
   <Cv />
 </div>

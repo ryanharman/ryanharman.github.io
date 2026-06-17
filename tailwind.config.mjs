@@ -11,7 +11,13 @@ export default {
 				background: "hsl(var(--background))",
 			},
 			fontFamily: {
-				sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+				sans: ['"Geist Variable"', "ui-sans-serif", "system-ui", "sans-serif"],
+				mono: [
+					'"Geist Mono Variable"',
+					"ui-monospace",
+					"SFMono-Regular",
+					"monospace",
+				],
 			},
 		},
 		keyframes: {

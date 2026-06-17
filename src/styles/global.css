@@ -7,10 +7,14 @@
     /* Always default to light mode */
     color-scheme: light;
 
-    /* Light theme variables - always used */
-    --primary: 0 0% 0%;
-    --secondary: 240 5.9% 10%;
-    --tertiary: 240 3.7% 15.9%;
+    /* Light theme variables - always used.
+       The ramp is spaced so each step reads as a distinct level on the 90%
+       background: primary = soft near-black for headings/body, secondary = a
+       clearly lighter body/muted tone, tertiary = genuinely muted meta text.
+       (Previously all three sat at 0–16% lightness and looked identical.) */
+    --primary: 240 6% 10%;
+    --secondary: 240 5% 32%;
+    --tertiary: 240 4% 45%;
     --background: 240 5.9% 90%;
   }
 
@@ -22,25 +26,251 @@
   /* 	--background: 0 0% 0%; */
   /* } */
 
+  html {
+    /* Let Geist Variable adapt its glyph shapes to the rendered size. */
+    font-optical-sizing: auto;
+  }
+
   img {
     @apply inline-block;
   }
+
+  /* Visible keyboard focus. The site previously relied on the browser default
+     only; this gives links, buttons and other focusable elements a consistent
+     ring in the brand colour. :focus-visible keeps it keyboard-only (no ring on
+     mouse clicks). :where() holds specificity at 0 so components can override. */
+  :where(a, button, [tabindex]):focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 }
 
-/* This is to allow us to scale the font-sizes of the PDF down to a size that allows us */
-/* to fit more content on a single page. Whilst still maintaining the Tailwind CSS font scaling */
-.pdf-font-size-scaler {
-  /* We assign Arial to the font because otherwise there are issues with the font rendering/spacing */
-  font-family: "Arial" !important;
+/* Respect users who ask for reduced motion: neutralise the looping wave
+   animation, the hover transforms, and any transitions. Astro's ClientRouter
+   also drops its view-transition cross-fade under this preference. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
-  .text-2xl {
-    font-size: 1.3rem !important;
+/* Long-form prose. Applied to the rendered markdown body of a thought post so
+   every element (headings, lists, links, code, quotes) is styled in one place
+   rather than via per-post inline classes or arbitrary child selectors. */
+@layer components {
+  /* The site's standard inline text link: an underline that darkens on hover.
+     Replaces the same utility string previously pasted inline across pages. */
+  .link {
+    @apply border-b border-primary/50 text-primary transition-colors hover:border-primary;
   }
-  .text-lg {
-    font-size: 0.95rem !important;
+
+  /* The standard outlined pill button/CTA. Floating/positioned variants (e.g.
+     the CV "Save as PDF" button) layer their own classes on top of this. */
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-md border border-primary/50 px-4 py-3 font-medium tracking-tight transition-colors hover:border-primary;
   }
-  .text-sm {
-    font-size: 0.75rem !important;
+
+  .prose {
+    color: hsl(var(--secondary));
+    font-size: 1.0625rem; /* 17px — a touch larger than base for comfortable reading */
+    line-height: 1.7;
   }
-  font-size: 0.9rem !important;
+
+  /* Vertical rhythm: space between consecutive blocks, with extra room above
+     headings so sections read as distinct. */
+  .prose > * + * {
+    margin-top: 1.25em;
+  }
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    color: hsl(var(--primary));
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+  .prose > :is(h2, h3, h4) + * {
+    margin-top: 0.5em;
+  }
+  .prose h2 {
+    font-size: 1.5rem;
+    margin-top: 2em;
+  }
+  .prose h3 {
+    font-size: 1.25rem;
+    margin-top: 1.75em;
+  }
+  .prose h4 {
+    font-size: 1.0625rem;
+    margin-top: 1.5em;
+  }
+
+  .prose a {
+    color: hsl(var(--primary));
+    border-bottom: 1px solid hsl(var(--primary) / 0.5);
+    transition: border-color 150ms;
+  }
+  .prose a:hover {
+    border-bottom-color: hsl(var(--primary));
+  }
+
+  .prose strong {
+    color: hsl(var(--primary));
+    font-weight: 600;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5rem;
+  }
+  .prose ul {
+    list-style-type: disc;
+  }
+  .prose ol {
+    list-style-type: decimal;
+  }
+  .prose li + li {
+    margin-top: 0.375em;
+  }
+  /* Tighten nested lists against their parent item. */
+  .prose li > ul,
+  .prose li > ol {
+    margin-top: 0.375em;
+  }
+
+  .prose blockquote {
+    border-left: 3px solid hsl(var(--primary) / 0.3);
+    padding-left: 1rem;
+    color: hsl(var(--tertiary));
+    font-style: italic;
+  }
+
+  .prose :not(pre) > code {
+    font-family: theme("fontFamily.mono");
+    font-size: 0.9em;
+    background: hsl(var(--primary) / 0.06);
+    padding: 0.15em 0.35em;
+    border-radius: 0.25rem;
+  }
+  .prose pre {
+    font-family: theme("fontFamily.mono");
+    font-size: 0.9em;
+    line-height: 1.6;
+    background: hsl(var(--primary) / 0.06);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+  }
+  .prose pre code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .prose hr {
+    border: none;
+    border-top: 1px solid hsl(var(--primary) / 0.2);
+  }
+}
+
+/* The CV exports via the browser's native "Save as PDF" (window.print). */
+/* This block strips the site chrome and lays the page out cleanly for A4. */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  body {
+    /* Drop the on-screen page padding/centering for print. */
+    padding: 0 !important;
+    max-width: none !important;
+  }
+
+  /* Hide site chrome (nav, footer) and anything marked print-hidden.
+     Scoped to direct children of <body> so the per-company <header>
+     elements inside the CV are not hidden too. */
+  body > header,
+  body > footer,
+  .print-hidden {
+    display: none !important;
+  }
+
+  /* Make the grey palette and borders actually render on paper. */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Page breaks: let everything flow freely across page boundaries so blocks
+     never get pushed wholesale onto the next page (which left large gaps).
+     The only constraint is keeping a company name together with its own date
+     line. We deliberately avoid `break-after: avoid`, since it glues a header
+     to the entire following roles list and forces tall blocks to jump pages. */
+  #cv-export header {
+    break-inside: avoid;
+  }
+
+  /* Density: smaller type and tighter leading, plus collapsed vertical
+     rhythm, so the CV fits on 1–2 pages instead of sprawling. */
+  #cv-export {
+    margin-top: 0 !important;
+    font-size: 9.5pt;
+    line-height: 1.35;
+  }
+  #cv-export .text-2xl {
+    font-size: 13pt;
+  }
+  #cv-export .text-lg {
+    font-size: 10.5pt;
+  }
+  #cv-export .text-sm {
+    font-size: 8.5pt;
+  }
+  #cv-export .text-xs {
+    font-size: 7.5pt;
+  }
+  /* Separation between top-level sections (bio / experience / certs). */
+  #cv-export .mb-10 {
+    margin-bottom: 1.4rem !important;
+  }
+  /* The experience section's bottom margin is the gap above the
+     certifications heading. The experience block above it is dense, so give
+     this boundary a little extra room to read as a clean section break. */
+  #cv-export .mb-12 {
+    margin-bottom: 1.9rem !important;
+  }
+  #cv-export .mb-6 {
+    margin-bottom: 0.5rem !important;
+  }
+  /* Gap between a section heading and its content. */
+  #cv-export .mb-4 {
+    margin-bottom: 0.4rem !important;
+  }
+  /* Compress the per-company padding (py-8 on screen) while keeping the
+     divider lines between companies. */
+  #cv-export article {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+  #cv-export .space-y-10 > * + * {
+    margin-top: 0.6rem !important;
+  }
+  #cv-export .space-y-7 > * + * {
+    margin-top: 0.45rem !important;
+  }
+  #cv-export .space-y-3 > * + * {
+    margin-top: 0.2rem !important;
+  }
 }

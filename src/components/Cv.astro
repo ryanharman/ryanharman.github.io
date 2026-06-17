@@ -1,98 +1,220 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
+import {
+	durationLabel,
+	formatMonthYear,
+	parseStack,
+	yearsOfExperience,
+} from "../lib/dates";
+import Slashes from "./Slashes.astro";
 
-const experience = await getCollection("experience");
+const allRoles = await getCollection("experience");
+
+// Headline experience: count from the very first employment (including any
+// hidden roles) and round up to the nearest year.
+const firstEmployment = allRoles.reduce(
+	(min, r) => (r.data.startDate < min ? r.data.startDate : min),
+	allRoles[0]!.data.startDate,
+);
+const yearsExperience = yearsOfExperience(firstEmployment);
+
+// visibility: "full" shows everything, "hideDescription" shows the role header
+// (title/dates/stack) without the body, "hidden" omits the role entirely.
+const roles = allRoles.filter((e) => e.data.visibility !== "hidden");
+
+// Group roles by company name so progression at a single employer renders
+// as one block with a shared header.
+const groups = new Map<string, typeof roles>();
+for (const role of roles) {
+	const key = role.data.company;
+	if (!groups.has(key)) groups.set(key, []);
+	groups.get(key)!.push(role);
+}
+
+// Treat an open-ended (ongoing) role as the most recent possible end date so
+// it sorts ahead of any completed role.
+const endTime = (date?: Date) =>
+	date ? date.getTime() : Number.POSITIVE_INFINITY;
+
+// Build a company view-model: roles ordered by most recent end date, plus the
+// aggregate range (earliest start → latest end, or "Present" if any role is
+// current).
+const companies = await Promise.all(
+	[...groups.values()].map(async (rolesAtCompany) => {
+		const sorted = rolesAtCompany.sort(
+			(a, b) => endTime(b.data.endDate) - endTime(a.data.endDate),
+		);
+		// Lead roles (umbrella/summary entries) render first within the block;
+		// the rest follow most-recent-first.
+		const ordered = [
+			...sorted.filter((r) => r.data.lead),
+			...sorted.filter((r) => !r.data.lead),
+		];
+		// Company header metadata comes from the most recent real role, ignoring
+		// any lead summary (whose dates span the whole block). Groups are only
+		// created when a role is pushed, so the fallback to sorted[0] is safe.
+		const newest = sorted.find((r) => !r.data.lead) ?? sorted[0]!;
+
+		const earliestStart = sorted.reduce(
+			(min, r) => (r.data.startDate < min ? r.data.startDate : min),
+			newest.data.startDate,
+		);
+		// Any open-ended role (including a lead summary, e.g. ongoing freelance)
+		// marks the whole block as current.
+		const isCurrent = sorted.some((r) => !r.data.endDate);
+		const latestEnd = isCurrent
+			? undefined
+			: sorted.reduce(
+					(max, r) => (r.data.endDate! > max ? r.data.endDate! : max),
+					newest.data.endDate!,
+				);
+
+		const first = newest.data;
+		return {
+			company: first.company,
+			companyLink: first.companyLink,
+			location: first.location,
+			earliestStart,
+			latestEnd,
+			// Order companies by most recent activity: ongoing blocks first
+			// (Infinity), otherwise by latest end date.
+			sortKey: isCurrent ? Number.POSITIVE_INFINITY : latestEnd!.getTime(),
+			// Tie-breaker for two ongoing (or co-ending) blocks: the one that
+			// started most recently leads, so the current job sits above freelance.
+			startKey: earliestStart.getTime(),
+			roles: await Promise.all(
+				ordered.map(async (role) => ({
+					data: role.data,
+					Content: (await render(role)).Content,
+				})),
+			),
+		};
+	}),
+);
+
+companies.sort((a, b) => b.sortKey - a.sortKey || b.startKey - a.startKey);
 ---
 
-    <div class="mb-6">
-      <div class="mb-6">
-        <h2 class="font-mono lowercase text-tertiary mb-4">bio</h2>
-        <p class="text-primary">I’m a goal and detail oriented Software Engineer with 7 years of commercial experience spanning across multiple sectors.</p>
-        <p class="text-primary">
-          I have a passion for creating excellent software experiences on the web and mobile.
-        </p>
-        <p class="text-primary">
-          I’m a social individual capable of working in a team, paired with a
-          colleague or independently for internal or external customers.
-        </p>
-      </div>
-      <h3 class="font-mono lowercase text-tertiary my-4">experience</h2>
-      <div class="space-y-6">
-        {
-          experience
-          .filter((e) => e.id !== 'bentley-motors-factory.mdx')
-            .sort(
-              (a, b) =>
-                // @ts-expect-error - it's a nightmare but it's ok for now
-                new Date(b.data["start-date"]) - new Date(a.data["start-date"])
-            )
-            .map(async (experience) => {
-              const { Content } = await experience.render();
-              return (
-                <div class="flex flex-col space-y-3 ">
-                  <div>
-                    <p class="text-primary text-2xl font-bold">
-                      {experience.data.title}
-                    </p>
-                    <p class="font-mono text-sm">
-                      {experience.data.stack}
-                    </p>
-                  </div>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-4 items-center w-fit font-medium">
-                    <div class="flex gap-4 items-center">
-                      <a
-                        href={experience.data["company-link"]}
-                        target="_blank"
-                        referrerpolicy="no-referrer"
-                        class="text-primary border-b-2 border-transparent hover:border-primary hover:border-b-2 hover:transition-none transition-all"
-                      >
-                        {experience.data.company}
-                      </a>
-                      <span class="tracking-[-0.3rem] text-tertiary font-mono text-lg">//</span>
-                      <p class="text-primary">{experience.data.location}</p>
-                      <span class="hidden sm:block tracking-[-0.3rem] text-tertiary font-mono text-lg">//</span>
-                    </div>
-                    <div class="flex gap-1">
-                      <p class="text-primary">{experience.data["start-date"]}</p>-
-                      <p class="text-primary">{experience.data["end-date"]}</p>
-                    </div>
-                  </div>
-                  <!-- TODO: I must be using MDX wrong as this is horrible to do styling of nested items -->
-                  <div class="[&>p]:mb-3 [&>ul]:space-y-2 [&>ul]:pl-6 [&>ul]:list-disc [&>ul]:text-secondary">
-                    <Content />
-                  </div>
-                </div>
-              )
-            })
-        }
-      </div>
-    </div>
-    <div class="my-12">
-      <h4 class="font-mono lowercase text-tertiary my-4">
-        certifications & education
-      </h3>
-      <div class="space-y-3">
-        <p class="text-primary font-medium">
-          City & Guilds - <span class="font-normal text-sm"
-            >Level 4 Distinction in Software Development & Software Development
-            Methodologies.</span
-          >
-        </p>
-        <p class="text-primary font-medium">
-          AWS Cloud Practitioner - <span class="font-normal text-sm"
-            >AWS cloud fluency and foundational knowledge.</span
-          >
-        </p>
-        <p class="text-primary font-medium">
-          MTA - <span class="font-normal text-sm"
-            >HTML5 Application Development Fundamentals.</span
-          >
-        </p>
-        <p class="text-primary font-medium">
-          FreeCodeCamp - <span class="font-normal text-sm"
-            >Responsive Web Design.</span
-          >
-        </p>
-      </div>
-    </div>
+<section class="mb-10">
+  <h2 class="font-mono lowercase text-tertiary mb-4"><Slashes /> bio</h2>
+  <div class="max-w-[65ch] space-y-3 text-primary leading-relaxed text-pretty">
+    <p>
+      I’m a goal and detail oriented Software Engineer with{" "}
+      {yearsExperience} years of commercial experience spanning across multiple
+      sectors.
+    </p>
+    <p>
+      I have a passion for creating excellent software experiences on the web
+      and mobile.
+    </p>
+    <p>
+      I’m a social individual capable of working in a team, paired with a
+      colleague or independently for internal or external customers.
+    </p>
+  </div>
+</section>
 
+<section class="mb-12">
+  <h2 class="font-mono lowercase text-tertiary mb-6"><Slashes /> experience</h2>
+  <div>
+    {
+      companies.map((company) => (
+        <article class="py-8 first:pt-0 last:pb-0">
+          <header class="mb-4">
+            <h3 class="text-2xl font-bold text-primary leading-tight tracking-tight text-balance">
+              <a
+                href={company.companyLink}
+                target="_blank"
+                referrerpolicy="no-referrer"
+                class="border-b-2 border-transparent hover:border-primary transition-all hover:transition-none"
+              >
+                {company.company}
+              </a>
+            </h3>
+            <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-tertiary tabular-nums">
+              <span>{company.location}</span>
+              <Slashes />
+              <span>
+                <time datetime={company.earliestStart.toISOString()}>
+                  {formatMonthYear(company.earliestStart)}
+                </time>
+                {" – "}
+                {company.latestEnd ? (
+                  <time datetime={company.latestEnd.toISOString()}>
+                    {formatMonthYear(company.latestEnd)}
+                  </time>
+                ) : (
+                  "Present"
+                )}
+              </span>
+              <span>· {durationLabel(company.earliestStart, company.latestEnd)}</span>
+            </div>
+          </header>
+
+          <ol class="space-y-7 pl-2">
+            {company.roles.map((role) => (
+              <li>
+                <h4 class="text-lg font-semibold text-primary leading-snug tracking-tight">
+                  {role.data.title}
+                </h4>
+                {company.roles.length > 1 && !role.data.lead && (
+                  <p class="mt-0.5 font-mono text-xs text-tertiary tabular-nums">
+                    <time datetime={role.data.startDate.toISOString()}>
+                      {formatMonthYear(role.data.startDate)}
+                    </time>
+                    {" – "}
+                    {role.data.endDate ? (
+                      <time datetime={role.data.endDate.toISOString()}>
+                        {formatMonthYear(role.data.endDate)}
+                      </time>
+                    ) : (
+                      "Present"
+                    )}
+                    <span> · {durationLabel(role.data.startDate, role.data.endDate)}</span>
+                  </p>
+                )}
+                <p class="mt-1 font-mono text-xs text-tertiary">
+                  {parseStack(role.data.stack).join(" · ")}
+                </p>
+                {role.data.visibility !== "hideDescription" && (
+                  <div class="mt-2 max-w-[65ch] text-secondary leading-relaxed text-pretty [&>p]:mb-3 [&>ul]:list-disc [&>ul]:space-y-2 [&>ul]:pl-6 [&>ul]:text-secondary">
+                    <role.Content />
+                  </div>
+                )}
+              </li>
+            ))}
+          </ol>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<section>
+  <h2 class="font-mono lowercase text-tertiary mb-4">
+    <Slashes /> certifications & education
+  </h2>
+  <div class="space-y-3">
+    <p class="text-primary font-medium">
+      City & Guilds - <span class="font-normal text-sm"
+        >Level 4 Distinction in Software Development & Software Development
+        Methodologies.</span
+      >
+    </p>
+    <p class="text-primary font-medium">
+      AWS Cloud Practitioner - <span class="font-normal text-sm"
+        >AWS cloud fluency and foundational knowledge.</span
+      >
+    </p>
+    <p class="text-primary font-medium">
+      MTA - <span class="font-normal text-sm"
+        >HTML5 Application Development Fundamentals.</span
+      >
+    </p>
+    <p class="text-primary font-medium">
+      FreeCodeCamp - <span class="font-normal text-sm"
+        >Responsive Web Design.</span
+      >
+    </p>
+  </div>
+</section>

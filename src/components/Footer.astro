@@ -1,17 +1,20 @@
+---
+import Slashes from "./Slashes.astro";
+---
+
+<footer class="border-t border-primary/50 py-6">
+  <p class="font-mono lowercase text-sm">
+    ryan harman <Slashes /> <span id="footer-year"></span>
+  </p>
+</footer>
+
 <script>
-  const today = new Date();
-
-  function updateYear() {
-    const year = today.getFullYear();
-    const pElement = document.getElementById("ryanharman");
-
-    if (pElement) {
-      pElement.textContent = `ryan harman // ${year}`;
-    }
+  // Keep the year current without rebuilds. Runs on first load and after each
+  // client-side (View Transitions) navigation.
+  function setFooterYear() {
+    const el = document.getElementById("footer-year");
+    if (el) el.textContent = String(new Date().getFullYear());
   }
 
-  updateYear();
+  document.addEventListener("astro:page-load", setFooterYear);
 </script>
-<footer class="border-t border-primary/50 py-6">
-  <p id="ryanharman" class="font-mono lowercase text-sm">ryan harman</p>
-</footer>

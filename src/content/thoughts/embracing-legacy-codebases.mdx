@@ -14,7 +14,7 @@ The instinct to hit reset and rebuild from scratch is real. But I’ve found tha
 Here’s how I’ve tackled improving legacy systems while still shipping features.
 
 
-<h3 class="text-primary text-xl font-medium pt-6 mb-4">Starting small with TypeScript</h3>
+### Starting small with TypeScript
 
 When I started adding TypeScript to an existing codebase, it was tempting to go all in, but I quickly realized that wasn’t realistic. Starting with a few key modules that we were already working on made things manageable. It wasn’t perfect from day one - there were plenty of any types and @ts-expect-error moments, but each incremental step made the codebase easier to work with.
 
@@ -23,7 +23,7 @@ Some findings:
 * Stay flexible: You don’t have to type everything perfectly from day one. Tools like @ts-expect-error can help ease the transition as well as generic type casting where needed.
 * Build momentum: Over time, as more areas adopt TypeScript, the benefits compound, making future work smoother.
 
-<h3 class="text-primary text-xl font-medium pt-6 mb-4">Sneaking in tests</h3>
+### Sneaking in tests
 
 Legacy code without tests is pretty common, especially when adopted from an agency (if you've worked agency, you understand that it's often hard to find the time to fit them in). The trick is to build up test coverage bit by bit without grinding everything to a halt.
 
@@ -31,7 +31,7 @@ Legacy code without tests is pretty common, especially when adopted from an agen
 * Test as you go: Add tests while working on new features or fixing bugs.
 * Small steps matter: Even a handful of new tests can boost confidence when making changes.
 
-<h3 class="text-primary text-xl font-medium pt-6 mb-4">Refactoring along the way</h3>
+### Refactoring along the way
 
 You don’t need a massive refactor to make a difference. Small, targeted improvements can have a big impact.
 
@@ -39,7 +39,7 @@ You don’t need a massive refactor to make a difference. Small, targeted improv
 * Keep it simple: Focus on making functions clearer and components easier to maintain.
 * Automate standards: Use tools like linters to enforce consistent style and catch issues early. I've recently come to love [Biome](https://biomejs.dev)
 
-<h3 class="text-primary text-xl font-medium pt-6 mb-4">Balancing improvement with product work</h3>
+### Balancing improvement with product work
 
 The most challenging part? Improving the codebase without slowing down product delivery. Here’s what’s worked for me:
 
@@ -48,7 +48,7 @@ The most challenging part? Improving the codebase without slowing down product d
 * Be realistic: Don’t let improvements block critical product work—balance is key.
 
 
-<h3 class="text-primary text-xl font-medium pt-6 mb-4">The takeaway</h3>
+### The takeaway
 
 Working with legacy code is all about balance. Improving code quality, adding tests, and adopting tools like TypeScript are all worthwhile challenges as long as they don’t derail product goals. Small steps add up, making the codebase cleaner and easier to work with over time, boosting both developer experience and product stability.
 

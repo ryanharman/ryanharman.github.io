@@ -5,11 +5,16 @@ import Layout from "./Layout.astro";
 
 type Props = CollectionEntry<"thoughts">["data"];
 
-const { title, description, publishedAt } = Astro.props;
+const { title, description, publishedAt, tags } = Astro.props;
 ---
 
-<Layout currentPage="/thoughts">
-  <div>
+<Layout
+  currentPage="/thoughts"
+  title={`${title} — Ryan Harman`}
+  description={description}
+  article={{ title, publishedAt, tags }}
+>
+  <div class="max-w-prose">
     <div class="flex justify-between gap-4 mb-2">
       <div class="col-span-2">
         <h2 class="text-primary text-2xl font-medium mb-2">{title}</h2>

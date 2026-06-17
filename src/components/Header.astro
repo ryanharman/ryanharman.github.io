@@ -1,13 +1,13 @@
 ---
 type Props = {
-  currentPage: "/" | "/about" | "/thoughts" | "/cv";
+	currentPage: "/" | "/about" | "/thoughts" | "/cv";
 };
 
 const { currentPage } = Astro.props;
 
 const activeClasses = "border-b border-tertiary/50 text-primary";
 const defaultClasses =
-  "hover:text-primary cursor-pointer py-1 px-1 hover:transition-none transition-all font-mono leading-tight";
+	"hover:text-primary cursor-pointer py-1 px-1 hover:transition-none transition-all font-mono leading-tight";
 ---
 
 <header class="flex gap-4 items-center justify-between">

@@ -5,14 +5,33 @@ import Layout from "../layouts/Layout.astro";
 const projects = await getCollection("projects");
 ---
 
-<Layout currentPage="/">
+<Layout currentPage="/" showHero>
   <article class="space-y-4">
-    <h2 class="text-2xl font-medium">Some of my projects</h2>
+    <!-- <h2 class="text-2xl font-medium tracking-tight">Let’s work together</h2> -->
     <p>
-      I love to build things and take on new challenges. Often attempts at just learning something new, other times to solve problems of my own. Either way, they're fun web apps and scripts that have supported in my understanding of the development world. 
+      I help forward-thinking individuals, startups and enterprises to develop
+      innovative digital solutions that drive business success and meet
+      ambitious deadlines.
+      <span class="font-medium text-tertiary"
+        >My goal is to always create exceptional experiences for the right
+        reasons.</span
+      >
     </p>
     <p>
-I always aim to share these projects with the world as open source and these are some of my favourites that I've built recently
+      You can find out more in my <a class="link" href="/about">about</a> page or take a look at my <a class="link" href="/cv">experience</a>
+    </p>
+  </article>
+  <article class="space-y-4">
+    <h2 class="text-2xl font-medium tracking-tight">Some of my projects</h2>
+    <p>
+      I love to build things and take on new challenges. Often attempts at just
+      learning something new, other times to solve problems of my own. Either
+      way, they’re fun web apps and scripts that have supported in my
+      understanding of the development world.
+    </p>
+    <p>
+      I always aim to share these projects with the world as open source, and
+      these are some of my favourites that I’ve built recently.
     </p>
 
     <div class="grid md:grid-cols-2 gap-x-4 gap-y-4">
@@ -21,7 +40,7 @@ I always aim to share these projects with the world as open source and these are
           <div class="space-y-4 hover:bg-primary/5 hover:transition-none transition-colors rounded-lg p-4">
             <div class="space-y-2">
               <a href={project.data.link} target="_blank">
-                <div class="tracking-wided font-medium border-b border-primary/50 hover:border-primary w-fit hover:transition-none transition-all">
+                <div class="link w-fit font-medium tracking-tight">
                   {project.data.title}
                 </div>
               </a>
@@ -35,29 +54,10 @@ I always aim to share these projects with the world as open source and these are
       }
     </div>
   </article>
-  <article class="space-y-4">
-    <h3 class="text-2xl font-medium">Lets work together</h3>
-    <p>
-      I help forward-thinking individuals, startups and enterprises to develop
-      innovative digital solutions that drive business success and meet
-      ambitious deadlines.
-      <span class="font-medium text-tertiary"
-        >My goal is to always create exceptional experiences for the right
-        reasons.</span
-      >
-    </p>
-    <p>
-      You can find out more in my <a
-        class="border-b border-primary/50 hover:border-primary cursor-pointer text-primary hover:transition-none transition-all"
-        href="/about">about</a
-      > page
-    </p>
     <div class="pt-6">
-      <a
-        class="group px-4 py-3 rounded-md border border-primary/50 hover:border-primary font-medium tracking-tight"
-        href="mailto:me@ryanharman.dev"
+      <a class="btn group" href="mailto:me@ryanharman.dev"
         >Work with me <svg
-          class="inline-block group-hover:-translate-y-[2px] group-hover:translate-x-[2px] transition-all"
+          class="inline-block group-hover:-translate-y-[2px] group-hover:translate-x-[2px] transition-transform"
           width="18"
           height="18"
           viewBox="0 0 15 15"
@@ -71,5 +71,4 @@ I always aim to share these projects with the world as open source and these are
         ></a
       >
     </div>
-  </article>
 </Layout>
