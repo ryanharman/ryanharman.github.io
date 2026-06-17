@@ -95,6 +95,13 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
 
+<!-- Icons / favicons (SVG for modern browsers, .ico fallback, Apple + PWA) -->
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#18181b" />
+
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
