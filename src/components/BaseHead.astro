@@ -111,11 +111,16 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={article ? "article" : "website"} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+<!-- astro-og-canvas renders cards at the OG-standard 1200x630; declaring the
+     dimensions lets platforms reserve the right aspect ratio before load. -->
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
 <meta property="og:site_name" content="Ryan Harman" />
 
 <!-- Twitter -->

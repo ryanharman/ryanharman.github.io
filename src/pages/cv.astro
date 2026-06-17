@@ -14,6 +14,9 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout currentPage="/cv" title="CV - Ryan Harman">
   <CvForExport />
+  <!-- Clearance so the fixed "Save as PDF" button never overlaps the last CV
+       entry when scrolled to the bottom on small screens. -->
+  <div class="h-16 print-hidden" aria-hidden="true"></div>
   <button
     id="download-btn"
     class="btn print-hidden fixed bottom-4 right-4 bg-background text-primary shadow-sm group my-4"
